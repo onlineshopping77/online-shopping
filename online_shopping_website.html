@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Shopping | Kaimur, Bihar</title>
+  <meta name="description" content="Online Shopping - Human Needs products in Kaimur, Bihar, India.">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f7f7fb;color:#222}
+    header{background:linear-gradient(135deg,#6c2bd9,#9b51e0);color:#fff;padding:18px 5%;position:sticky;top:0;z-index:10}
+    .nav{display:flex;justify-content:space-between;align-items:center;gap:15px;max-width:1150px;margin:auto}
+    .logo{font-size:25px;font-weight:800}
+    .cart-btn{border:0;background:#fff;color:#6c2bd9;padding:10px 16px;border-radius:25px;font-weight:700;cursor:pointer}
+    .hero{max-width:1150px;margin:28px auto;padding:45px 6%;border-radius:24px;background:linear-gradient(135deg,#efe7ff,#fff);text-align:center}
+    .hero h1{font-size:42px;margin:0 0 12px}
+    .hero p{font-size:18px;color:#555;margin:8px}
+    .location{margin-top:18px;font-weight:700;color:#6c2bd9}
+    .section{max-width:1150px;margin:35px auto;padding:0 18px}
+    .section h2{text-align:center;font-size:30px}
+    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+    .card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 5px 18px #00000012}
+    .pic{height:190px;background:linear-gradient(135deg,#eee,#ddd);display:flex;align-items:center;justify-content:center;font-size:64px}
+    .info{padding:17px}
+    .info h3{margin:0 0 8px}
+    .price{font-size:21px;font-weight:800;color:#6c2bd9}
+    .add{width:100%;margin-top:12px;border:0;background:#6c2bd9;color:#fff;padding:12px;border-radius:10px;font-weight:700;cursor:pointer}
+    .contact{max-width:850px;margin:35px auto;background:#fff;padding:28px;border-radius:20px;text-align:center;box-shadow:0 5px 18px #00000012}
+    .whatsapp{display:inline-block;margin-top:12px;background:#20a94b;color:white;text-decoration:none;padding:13px 22px;border-radius:10px;font-weight:700}
+    footer{margin-top:40px;background:#21133b;color:#fff;text-align:center;padding:25px}
+    .modal{display:none;position:fixed;inset:0;background:#0008;z-index:20;padding:20px}
+    .box{background:#fff;max-width:520px;margin:7vh auto;padding:25px;border-radius:18px}
+    .box h2{margin-top:0}
+    .close{float:right;border:0;background:none;font-size:25px;cursor:pointer}
+    input,textarea{width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:9px}
+    .checkout{width:100%;padding:13px;border:0;background:#6c2bd9;color:#fff;border-radius:10px;font-weight:700;cursor:pointer}
+    ul{padding-left:20px}
+    @media(max-width:600px){.hero h1{font-size:32px}.hero{margin:15px 12px;padding:35px 18px}.logo{font-size:20px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="logo">🛍️ Online Shopping</div>
+    <button class="cart-btn" onclick="openCart()">Cart (<span id="count">0</span>)</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Online Shopping</h1>
+  <p>Human Needs ke liye useful products, ek hi jagah.</p>
+  <div class="location">📍 Kaimur, Bihar, India</div>
+</section>
+
+<section class="section">
+  <h2>🛒 Popular Products</h2>
+  <div class="products" id="products"></div>
+</section>
+
+<section class="contact">
+  <h2>Order / Contact</h2>
+  <p>Product pasand aaye? Cart mein add karke order request bhejein.</p>
+  <p><strong>📞 7561980705</strong></p>
+  <p>📍 Kaimur, Bihar, India</p>
+  <a class="whatsapp" href="https://wa.me/917561980705" target="_blank">WhatsApp par Contact Karein</a>
+</section>
+
+<footer>
+  <strong>Online Shopping</strong><br>
+  Kaimur, Bihar, India<br><br>
+  © 2026 Online Shopping. All rights reserved.
+</footer>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <button class="close" onclick="closeCart()">×</button>
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <hr>
+    <p><strong>Total: ₹<span id="total">0</span></strong></p>
+    <input id="name" placeholder="Aapka naam">
+    <input id="phone" placeholder="Mobile number">
+    <textarea id="address" rows="3" placeholder="Delivery address"></textarea>
+    <button class="checkout" onclick="sendOrder()">WhatsApp par Order Bhejein</button>
+  </div>
+</div>
+
+<script>
+const products = [
+  {name:"Daily Use Water Bottle", price:299, icon:"🧴"},
+  {name:"Kitchen Storage Set", price:399, icon:"🍱"},
+  {name:"LED Night Lamp", price:249, icon:"💡"},
+  {name:"Home Cleaning Set", price:349, icon:"🧹"},
+  {name:"Mobile Stand", price:199, icon:"📱"},
+  {name:"Travel Organizer", price:299, icon:"🧳"}
+];
+let cart=[];
+
+function renderProducts(){
+  document.getElementById("products").innerHTML=products.map((p,i)=>`
+    <div class="card">
+      <div class="pic">${p.icon}</div>
+      <div class="info">
+        <h3>${p.name}</h3>
+        <div class="price">₹${p.price}</div>
+        <button class="add" onclick="add(${i})">Add to Cart</button>
+      </div>
+    </div>`).join("");
+}
+function add(i){cart.push(products[i]);update();alert("Product cart mein add ho gaya.");}
+function update(){document.getElementById("count").textContent=cart.length;}
+function openCart(){
+  const modal=document.getElementById("modal");
+  modal.style.display="block";
+  const items=document.getElementById("cartItems");
+  if(!cart.length){items.innerHTML="<p>Cart abhi empty hai.</p>";document.getElementById("total").textContent="0";return;}
+  items.innerHTML="<ul>"+cart.map(p=>`<li>${p.name} — ₹${p.price}</li>`).join("")+"</ul>";
+  document.getElementById("total").textContent=cart.reduce((s,p)=>s+p.price,0);
+}
+function closeCart(){document.getElementById("modal").style.display="none";}
+function sendOrder(){
+  if(!cart.length){alert("Pehle product cart mein add karein.");return;}
+  const name=document.getElementById("name").value.trim();
+  const phone=document.getElementById("phone").value.trim();
+  const address=document.getElementById("address").value.trim();
+  if(!name||!phone||!address){alert("Naam, mobile aur address bharna zaroori hai.");return;}
+  const list=cart.map(p=>`- ${p.name} (₹${p.price})`).join("\n");
+  const total=cart.reduce((s,p)=>s+p.price,0);
+  const msg=`Namaste, mujhe Online Shopping se order karna hai.\n\nNaam: ${name}\nMobile: ${phone}\nAddress: ${address}\n\nProducts:\n${list}\n\nTotal: ₹${total}`;
+  window.open("https://wa.me/917561980705?text="+encodeURIComponent(msg),"_blank");
+}
+renderProducts();
+</script>
+</body>
+</html>
